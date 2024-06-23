@@ -1,0 +1,89 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-retaskabledb-dev-cd2c0-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730335443390:role/amplify-retaskabledb-dev-cd2c0-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730335443390:role/amplify-retaskabledb-dev-cd2c0-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-retaskabledb-dev-cd2c0-deployment",
+      "UnauthRoleName": "amplify-retaskabledb-dev-cd2c0-unauthRole",
+      "StackName": "amplify-retaskabledb-dev-cd2c0",
+      "StackId": "arn:aws:cloudformation:us-east-1:730335443390:stack/amplify-retaskabledb-dev-cd2c0/8f790860-3185-11ef-92f0-0e626a437241",
+      "AmplifyAppId": "d1xoghuh31cism"
+    }
+  },
+  "auth": {
+    "retaskabledb99683ad3": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledb-dev-cd2c0-deployment/amplify-cfn-templates/auth/retaskabledb99683ad3-cloudformation-template.json",
+        "logicalId": "authretaskabledb99683ad3"
+      },
+      "lastPushTimeStamp": "2024-06-23T17:35:25.130Z"
+    }
+  },
+  "storage": {
+    "s36047f43a": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "lastPushTimeStamp": "2024-06-23T17:35:25.124Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledb-dev-cd2c0-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storages36047f43a"
+      }
+    }
+  },
+  "api": {
+    "retaskabledb": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "retaskabledb99683ad3",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ],
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authretaskabledb99683ad3"
+            }
+          },
+          "additionalAuthenticationProviders": []
+        }
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledb-dev-cd2c0-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apiretaskabledb"
+      },
+      "lastPushTimeStamp": "2024-06-23T17:35:25.115Z"
+    }
+  }
+}
