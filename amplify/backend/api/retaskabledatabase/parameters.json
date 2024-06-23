@@ -1,0 +1,5 @@
+{
+  "AppSyncApiName": "retaskabledatabase",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false
+}

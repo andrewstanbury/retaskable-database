@@ -152,15 +152,15 @@
         }
       }
     },
-    "authretaskabledb99683ad3": {
+    "authretaskabledatabasec95903f1": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledb-dev-cd2c0-deployment/amplify-cfn-templates/auth/retaskabledb99683ad3-cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledatabase-dev-a4559-deployment/amplify-cfn-templates/auth/retaskabledatabasec95903f1-cloudformation-template.json",
         "Parameters": {
-          "identityPoolName": "retaskabledb99683ad3_identitypool_99683ad3",
-          "allowUnauthenticatedIdentities": false,
-          "resourceNameTruncated": "retask99683ad3",
-          "userPoolName": "retaskabledb99683ad3_userpool_99683ad3",
+          "identityPoolName": "retaskabledatabasec95903f1_identitypool_c95903f1",
+          "allowUnauthenticatedIdentities": true,
+          "resourceNameTruncated": "retaskc95903f1",
+          "userPoolName": "retaskabledatabasec95903f1_userpool_c95903f1",
           "autoVerifiedAttributes": "email",
           "mfaConfiguration": "OFF",
           "mfaTypes": "SMS Text Message",
@@ -177,10 +177,10 @@
           "userpoolClientRefreshTokenValidity": 30,
           "userpoolClientWriteAttributes": "email",
           "userpoolClientReadAttributes": "email",
-          "userpoolClientLambdaRole": "retask99683ad3_userpoolclient_lambda_role",
+          "userpoolClientLambdaRole": "retaskc95903f1_userpoolclient_lambda_role",
           "userpoolClientSetAttributes": false,
-          "sharedId": "99683ad3",
-          "resourceName": "retaskabledb99683ad3",
+          "sharedId": "c95903f1",
+          "resourceName": "retaskabledatabasec95903f1",
           "authSelections": "identityPoolAndUserPool",
           "useDefault": "default",
           "userPoolGroupList": "",
@@ -205,53 +205,47 @@
         }
       }
     },
-    "storages36047f43a": {
+    "storages324417f5c": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledb-dev-cd2c0-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledatabase-dev-a4559-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
         "Parameters": {
-          "bucketName": "retaskabledb94e5b4fdab8643cfbb3b1837c3008adc",
-          "selectedGuestPermissions": "",
-          "selectedAuthenticatedPermissions": "s3:PutObject,s3:GetObject,s3:ListBucket,s3:DeleteObject",
+          "bucketName": "retaskabledatabase81aac261984e4cc8a0663e38b868f",
+          "selectedGuestPermissions": "s3:GetObject,s3:ListBucket",
+          "selectedAuthenticatedPermissions": "s3:PutObject,s3:GetObject,s3:ListBucket",
           "unauthRoleName": {
             "Ref": "UnauthRoleName"
           },
           "authRoleName": {
             "Ref": "AuthRoleName"
           },
-          "s3PrivatePolicy": "Private_policy_6047f43a",
-          "s3ProtectedPolicy": "Protected_policy_6047f43a",
-          "s3PublicPolicy": "Public_policy_6047f43a",
-          "s3ReadPolicy": "read_policy_6047f43a",
-          "s3UploadsPolicy": "Uploads_policy_6047f43a",
-          "authPolicyName": "s3_amplify_6047f43a",
-          "unauthPolicyName": "s3_amplify_6047f43a",
+          "s3PrivatePolicy": "Private_policy_24417f5c",
+          "s3ProtectedPolicy": "Protected_policy_24417f5c",
+          "s3PublicPolicy": "Public_policy_24417f5c",
+          "s3ReadPolicy": "read_policy_24417f5c",
+          "s3UploadsPolicy": "Uploads_policy_24417f5c",
+          "authPolicyName": "s3_amplify_24417f5c",
+          "unauthPolicyName": "s3_amplify_24417f5c",
           "AuthenticatedAllowList": "ALLOW",
-          "GuestAllowList": "DISALLOW",
-          "s3PermissionsAuthenticatedPrivate": "s3:PutObject,s3:GetObject,s3:DeleteObject",
-          "s3PermissionsAuthenticatedProtected": "s3:PutObject,s3:GetObject,s3:DeleteObject",
-          "s3PermissionsAuthenticatedPublic": "s3:PutObject,s3:GetObject,s3:DeleteObject",
+          "GuestAllowList": "ALLOW",
+          "s3PermissionsAuthenticatedPrivate": "s3:PutObject,s3:GetObject",
+          "s3PermissionsAuthenticatedProtected": "s3:PutObject,s3:GetObject",
+          "s3PermissionsAuthenticatedPublic": "s3:PutObject,s3:GetObject",
           "s3PermissionsAuthenticatedUploads": "s3:PutObject",
-          "s3PermissionsGuestPublic": "DISALLOW",
+          "s3PermissionsGuestPublic": "s3:GetObject",
           "s3PermissionsGuestUploads": "DISALLOW",
           "env": "dev"
         }
       }
     },
-    "apiretaskabledb": {
+    "apiretaskabledatabase": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledb-dev-cd2c0-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledatabase-dev-a4559-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "Parameters": {
-          "AppSyncApiName": "retaskabledb",
-          "AuthCognitoUserPoolId": {
-            "Fn::GetAtt": [
-              "authretaskabledb99683ad3",
-              "Outputs.UserPoolId"
-            ]
-          },
-          "S3DeploymentBucket": "amplify-retaskabledb-dev-cd2c0-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/bfbd2ac6ae1204aa8474ca4a18509c6ee0f3addf",
+          "AppSyncApiName": "retaskabledatabase",
+          "S3DeploymentBucket": "amplify-retaskabledatabase-dev-a4559-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/0188afe8d891ad1bec330a5115a755fa68c49b97",
           "env": "dev"
         }
       }
@@ -260,7 +254,7 @@
       "DependsOn": [
         "AuthRole",
         "UnauthRole",
-        "authretaskabledb99683ad3"
+        "authretaskabledatabasec95903f1"
       ],
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -370,7 +364,7 @@
         },
         "idpId": {
           "Fn::GetAtt": [
-            "authretaskabledb99683ad3",
+            "authretaskabledatabasec95903f1",
             "Outputs.IdentityPoolId"
           ]
         },

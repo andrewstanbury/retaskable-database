@@ -1,19 +1,19 @@
 {
   "providers": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-retaskabledb-dev-cd2c0-authRole",
-      "UnauthRoleArn": "arn:aws:iam::730335443390:role/amplify-retaskabledb-dev-cd2c0-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::730335443390:role/amplify-retaskabledb-dev-cd2c0-authRole",
+      "AuthRoleName": "amplify-retaskabledatabase-dev-a4559-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730335443390:role/amplify-retaskabledatabase-dev-a4559-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730335443390:role/amplify-retaskabledatabase-dev-a4559-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-retaskabledb-dev-cd2c0-deployment",
-      "UnauthRoleName": "amplify-retaskabledb-dev-cd2c0-unauthRole",
-      "StackName": "amplify-retaskabledb-dev-cd2c0",
-      "StackId": "arn:aws:cloudformation:us-east-1:730335443390:stack/amplify-retaskabledb-dev-cd2c0/8f790860-3185-11ef-92f0-0e626a437241",
-      "AmplifyAppId": "d1xoghuh31cism"
+      "DeploymentBucketName": "amplify-retaskabledatabase-dev-a4559-deployment",
+      "UnauthRoleName": "amplify-retaskabledatabase-dev-a4559-unauthRole",
+      "StackName": "amplify-retaskabledatabase-dev-a4559",
+      "StackId": "arn:aws:cloudformation:us-east-1:730335443390:stack/amplify-retaskabledatabase-dev-a4559/8359aae0-3193-11ef-aedc-0affde095fa1",
+      "AmplifyAppId": "d1sf8rzg3prei7"
     }
   },
   "auth": {
-    "retaskabledb99683ad3": {
+    "retaskabledatabasec95903f1": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -37,53 +37,45 @@
         ]
       },
       "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledb-dev-cd2c0-deployment/amplify-cfn-templates/auth/retaskabledb99683ad3-cloudformation-template.json",
-        "logicalId": "authretaskabledb99683ad3"
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledatabase-dev-a4559-deployment/amplify-cfn-templates/auth/retaskabledatabasec95903f1-cloudformation-template.json",
+        "logicalId": "authretaskabledatabasec95903f1"
       },
-      "lastPushTimeStamp": "2024-06-23T17:35:25.130Z"
+      "lastPushTimeStamp": "2024-06-23T19:08:56.434Z"
     }
   },
   "storage": {
-    "s36047f43a": {
+    "s324417f5c": {
       "service": "S3",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
-      "lastPushTimeStamp": "2024-06-23T17:35:25.124Z",
+      "lastPushTimeStamp": "2024-06-23T19:08:56.492Z",
       "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledb-dev-cd2c0-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
-        "logicalId": "storages36047f43a"
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledatabase-dev-a4559-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storages324417f5c"
       }
     }
   },
   "api": {
-    "retaskabledb": {
+    "retaskabledatabase": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "retaskabledb99683ad3",
-          "attributes": [
-            "UserPoolId"
-          ]
-        }
-      ],
+      "dependsOn": [],
       "output": {
         "authConfig": {
           "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authretaskabledb99683ad3"
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
             }
           },
           "additionalAuthenticationProviders": []
         }
       },
       "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledb-dev-cd2c0-deployment/amplify-cfn-templates/api/cloudformation-template.json",
-        "logicalId": "apiretaskabledb"
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-retaskabledatabase-dev-a4559-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apiretaskabledatabase"
       },
-      "lastPushTimeStamp": "2024-06-23T17:35:25.115Z"
+      "lastPushTimeStamp": "2024-06-23T19:08:56.485Z"
     }
   }
 }

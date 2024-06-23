@@ -1,23 +1,15 @@
 {
   "api": {
-    "retaskabledb": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "UserPoolId"
-          ],
-          "category": "auth",
-          "resourceName": "retaskabledb99683ad3"
-        }
-      ],
+    "retaskabledatabase": {
+      "dependsOn": [],
       "output": {
         "authConfig": {
           "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
-            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-            "userPoolConfig": {
-              "userPoolId": "authretaskabledb99683ad3"
-            }
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
           }
         }
       },
@@ -26,7 +18,7 @@
     }
   },
   "auth": {
-    "retaskabledb99683ad3": {
+    "retaskabledatabasec95903f1": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -52,7 +44,7 @@
     }
   },
   "storage": {
-    "s36047f43a": {
+    "s324417f5c": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"

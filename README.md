@@ -1,229 +1,98 @@
-# Plush
+# AWS AppSync GraphQL Photo Sample
 
-![Plush](https://user-images.githubusercontent.com/26605247/56092404-a2808780-5eb3-11e9-82de-60f9a651ceee.png)
+**Please submit issues to the [appsync-sdk-js](https://github.com/awslabs/aws-mobile-appsync-sdk-js/issues) repository.**
 
-Plush is a full-stack mobile application for pictures sharing. It uses Expo and React Native for the front end, AWS Amplify as the back-end service, and the API service is built with GraphQL.
+![Demo](public/demo.gif)
 
-## Demo
+This sample application shows how to use GraphQL to build an application that a user can login to the system, then upload and download photos which are private to them. The sample is written in React and uses AWS AppSync, Amazon Cognito, Amazon DynamoDB and Amazon S3 as well as the Amplify CLI.
 
-Demo video of the app functionalities in [here](https://www.youtube.com/watch?v=XRmUAU7hSNs).
+## Architecture Overview
 
-## Overview
+![Architecture](public/architecture_diagram.png)
 
-After sign up/sign in, users can perform the following:
-* Give access to their mobile device library by pressing the camera icon in the header.
-* Upload pictures to the feed.
-* Like and unlike pictures (from other users and their own).
-* Refresh the feed by pull-to-refresh or by pressing the reload button in the header.
-* Flag inappropriate content by pressing the options icon in the image card footer.
-* Remove their own pictures from the feed. Also available in the options icon.
-
-
-## App flow
-
-* Users are authenticated using out of the box AWS Amplify authentication flow.
-
-* Users a redirected to the only screen of the app: the feed.
-
-* When a user uploads a picture:
-  * A put request with RNS3 will store the file in an AWS-S3 bucket.
-  * An Apollo graphql mutation will store a record in a DynamoDB Picture table.
-  
-* When a user flags inappropriate content:
-  * An AppSync Client graphql mutation will store a record in a DynamoDB Flag table.
-  * The front-end will hide that picture from the user's feed.
-  
-* When a user likes/unlikes a picture:
-  * An AppSync Client graphql mutation will create a like instance in a DynamoDB Like table.
-  * An AppSync Client graphql mutation will destroy that like instance from the DynamoDB Like table.
-  
-* When a user deletes a picture:
-  * A remove request with the Amplify Storage API will delete the associated file from the AWS-S3 bucket.
-  * An Apollo graphql mutation will destroy the record from the DynamoDB Picture table.
-  * The feed is refreshed to display the current pictures.
-  
-* When a user refreshes the feed:
-  * An AppSync Client graphql query will request all the current pictures stored in the DynamoDB Picture table.
-  
 ## Prerequisites
++ [AWS Account](https://aws.amazon.com/mobile/details/)
 
-To run this app on your local machine, you need the following tools:
++ [NodeJS](https://nodejs.org/en/download/) with [NPM](https://docs.npmjs.com/getting-started/installing-node)
 
-* [Expo CLI](https://docs.expo.io/versions/latest/workflow/expo-cli/)
-  * `npm install -g expo-cli`
-  
-* [AWS account](https://aws.amazon.com/amplify/)
++ [AWS Ampify CLI](https://aws-amplify.github.io/)
+  - `npm install -g @aws-amplify/cli`
+  - `amplify configure` 
 
-* [Node JS](https://nodejs.org/en/download/) with [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+## Getting Started
 
-* [AWS Amplify CLI](https://aws-amplify.github.io/)
-  * `npm install -g @aws-amplify/cli`
-  * `amplify configure` ([link](https://www.youtube.com/watch?v=fWbM5DLh25U) for a step by step video).
-
-## Configuring the back-end
-
-1. Clone this repo to your local machine.
+1. Clone this repo locally.
 
 ```
-git clone https://github.com/yhenni1989/plush
-
-cd plush
+git clone https://github.com/aws-samples/aws-amplify-graphql.git
+cd aws-amplify-graphql
 ```
 
-2. Add AWS Amplify dependencies to your project.
-
-```
-yarn add aws-amplify aws-amplify-react-native
-
-# or
-
-npm install aws-amplify aws-amplify-react-native
-```
-
-3. Initialise the AWS Amplify project.
+2. Initialize the amplify project.
 
 ```
 amplify init
 ```
 
-4. Follow the same instructions as below.
-
-<img width="561" alt="init" src="https://user-images.githubusercontent.com/26605247/54110565-98152e80-43d9-11e9-9eed-e728cbf2ecd6.png">
-
-5. Configure an Amazon Cognito User Pool to store users credentials.
+3. Configure an Amazon Cognito User Pool to manage user credentials.
 
 ```
 amplify add auth
-
-# When prompt, choose: Yes, use the default configuration.
 ```
 
-6. Add an Amazon S3 bucket to store pictures.
+![Architecture](public/amplify-add-auth.png)
+
+4. Configure an Amazon S3 bucket to store files.
 
 ```
 amplify add storage
-
-# Choose: Content (Images, audio, video, etc.)
-# Give access to only authenticated users.
-# Give users read/write acces.
 ```
 
-7. Add GraphQL API to your project.
+![Architecture](public/amplify-add-storage.png)
+
+5. Configure an AWS AppSync API to interact with my backend data sources such as Amazon DynamoDB, Amazon Elasticsearch, AWS Lambda, and self hosted HTTP services. 
 
 ```
 amplify add api
 
-# Choose GraphQL as the API service. 
-# Choose an authorization type for the API: Amazon Cognito User Pool
-# Do you have an annotated GraphQL schema? Yes
-# Provide your schema file path: src/graphQL/schema.graphql
+# When prompted for a schema.graphql provide the value "schema.graphql"
+# to point to the file checked in to the root of the project directory.
 ```
 
- * The schema for this project, located at src/graphQL/schema.graphql, looks like this:
+![Architecture](public/amplify-add-api.png)
 
-```graphql
-type Picture @model {
-  id: ID!
-  pictureOwnerId: String!
-  pictureOwnerUsername: String!
-  visibility: Visibility
-  file: S3Object
-  likes: [Like] @connection(name: "PictureLikes")
-  flags: [Flag] @connection(name: "PictureFlags")
-}
+> After running this command, you edit the schema.graphql located at `amplify/backend/api/<-projectname->/schema.graphql`. You may delete the one at the root of the project directory as it will no longer be used.
 
-type Like @model {
-  id: ID!
-  likeOwnerId: String!
-  likeOwnerUsername: String!
-  picture: Picture @connection(name: "PictureLikes")
-}
-
-type Flag @model {
-  id: ID!
-  flagOwnerId: String!
-  flagOwnerUsername: String!
-  picture: Picture @connection(name: "PictureFlags")
-}
-
-type S3Object {
-  bucket: String!
-  region: String!
-  key: String!
-  uri: String!
-}
-
-enum Visibility {
-  public
-  private
-}
-```
-
- * Picture, Like, and Flag are all DynamoDB tables used to store the data from users input.
-
-8. Time to deploy your project to the cloud :stuck_out_tongue:.
+6. Deploy your project.
 
 ```
 amplify push
+
+# When asked if you would like to generate client code, you can
+# say no since we are using plain JavaScript.
 ```
 
-<img width="473" alt="cloudformation" src="https://user-images.githubusercontent.com/26605247/54111473-d7447f00-43db-11e9-9fe8-57edd0a36fe8.png">
+7. Install client dependencies.
 
 ```
-Do you want to generate code for your newly created GraphQL API: No.
-```
-
-The AWS Amplify CLI will create an Amazon Cognito User Pool and Identity Pool, an Amazon S3 bucket to store each users pictures and an AWS AppSync GraphQL API that uses Amazon DynamoDB to store metadata about the pictures (i.e. bucket name, likes, flags, owner, date of creation ... etc).
-
-## Running the application
-
-1. Install client dependencies.
-
-```
-yarn
-
-# or
-
 npm install
-```
-
-2. You will need your AWS IAM credentials to access your S3 bucket.
-
- * Copy your access and secret keys in the `src/myKeys.js` file of your project.
-
-```javascript
-const keys = {
- accessKey: 'blablabla',
- secretKey: 'blablabla',
-}
-export default keys
-```
-
- * Save the changes.
-
-3. Now you are ready to launch and test the app :rocket:.
-
-```
-expo start --ios
 
 # or
-
-expo start --android
+yarn
 ```
 
-4. Create a new user.
+8. Run the react application
 
-* The app uses the Higher Order Component **withAuthenticator** (HOC) from AWS Amplify to perform the authentication flow: sign up, confirm sign up and sign in users.
+```
+npm run start
 
-5. Add and display pictures.
+# or
+yarn start
+```
 
-* If the application runs successfully you should be able to press the camera icon, allow access to the device library, and select a picture from your device. This will upload the picture to S3 then make a GraphQL call to enter the record into DynamoDB. 
+The AWS Amplify CLI will create an Amazon Cognito User Pool and Identity Pool, an Amazon S3 bucket with private directories to store each user's photo and an AWS AppSync API that uses Amazon DynamoDB to store data.
 
-* You can then press the refresh button to display the picture on the screen.
+The sample uses [AWS Amplify](https://github.com/aws/aws-amplify) to perform the Sign-Up and Sign-In flows with a Higher Order Component.
 
-* You can like/unlike and flag other users pictures, and delete your own pictures. 
-
-## Want to contribute ?
-* If you like this project, help me grow and improve it by sending pull requests :muscle:.
-
+If the application runs successfully you should be able to enter the name of a photo, choose a file and then press **Add photo**. This will make a GraphQL call to enter the record into the database and simultaneously upload the object to S3. An immediate fetch of the record will then be at the bottom of the screen.
 
