@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-retaskabledatabase-dev-cf1c3-authRole",
+      "UnauthRoleArn": "arn:aws:iam::730335443390:role/amplify-retaskabledatabase-dev-cf1c3-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::730335443390:role/amplify-retaskabledatabase-dev-cf1c3-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-retaskabledatabase-dev-cf1c3-deployment",
+      "UnauthRoleName": "amplify-retaskabledatabase-dev-cf1c3-unauthRole",
+      "StackName": "amplify-retaskabledatabase-dev-cf1c3",
+      "StackId": "arn:aws:cloudformation:us-east-1:730335443390:stack/amplify-retaskabledatabase-dev-cf1c3/44dce730-32b2-11ef-9934-0afff5896401",
+      "AmplifyAppId": "djz85dd2tl0nt"
+    },
+    "categories": {
+      "auth": {
+        "retaskabledatabase09824614": {}
+      },
+      "storage": {
+        "s373efc1c1": {}
+      }
+    }
+  }
+}

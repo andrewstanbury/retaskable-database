@@ -1,0 +1,15 @@
+{
+  "resourceName": "s373efc1c1",
+  "policyUUID": "73efc1c1",
+  "bucketName": "retaskabledatabasecb96c483811142899be9ae963ecb5",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
