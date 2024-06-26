@@ -1,100 +1,50 @@
-# AWS CDK AppSync DynamoDB Table Joining Demo
+# Welcome to your Expo app 👋
 
-<!--BEGIN STABILITY BANNER-->
+This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
+## Get started
 
-> **This is a stable example. It should successfully build out of the box**
->
-> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
----
+1. Install dependencies
 
-<!--END STABILITY BANNER-->
+   ```bash
+   npm install
+   ```
 
-This project demonstrates how to use AWS CDK (Cloud Development Kit) to create an AWS AppSync API backed by DynamoDB tables. The essence of this project lies in establishing a one-to-many relationship between two tables, where one table stores information about cars, and the other stores information about defects associated with cars. This allows querying both tables together as a sort of nested query.
+2. Start the app
 
-## Table of Contents
-- [Overview](#overview)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Architecture](#architecture)
+   ```bash
+    npx expo start
+   ```
 
-## Overview
+In the output, you'll find options to open the app in a
 
-This project sets up an AWS AppSync API named `carAPI` with two DynamoDB tables: `cardata-cars` and `cardata-defects`. The `cardata-cars` table stores information about cars, while the `cardata-defects` table stores information about defects associated with cars. The AppSync API provides GraphQL endpoints to query and mutate data in these tables. The essence of this project is to enable querying both tables in a nested manner, representing the one-to-many relationship between cars and defects.
+- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-The data used in this project is sourced from public data of RDW (Government agency Dienst Wegverkeer, commonly known as RDW, which handles the type-approval and registration of motorized vehicles and driving licences in the Netherlands). This data used in this project is based on data freely available for use without any restrictions.
+You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Prerequisites
+## Get a fresh project
 
-Before getting started, ensure you have the following prerequisites:
-- Node.js installed (v18.x)
-- AWS CDK installed (`npm install -g aws-cdk`)
-- AWS CLI configured with appropriate credentials
-
-## Installation
-
-1. Clone this repository to your local machine.
-2. Navigate to the project directory.
-3. Install dependencies by running `npm install`.
-
-## Usage
-
-To deploy the AWS infrastructure, run the following command:
+When you're ready, run:
 
 ```bash
-cdk deploy
+npm run reset-project
 ```
 
-To remove the deployed infrastructure, run:
+This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-```bash
-cdk destroy
-```
+## Learn more
 
-The data in the DynamoDB tables can be populated using the utilities provided in `utils/index.js`. It will take a couple of seconds to push all the data to DynamoDB. Execute the following command to populate the tables:
+To learn more about developing your project with Expo, look at the following resources:
 
-```bash
-npm run push-data
-```
+- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
-Once the CDK stack is deployed and the data is ingested into the DynamoDB tables you can query it through the AWS Appsync Console. If you can go to the query tab you can execute the following GraphQL Request:
+## Join the community
 
-```graphql
-query GetCar {
-  getCar(licenseplate: "BR794ZQ3") {
-    expirydateapk
-    cylindervolume
-    catalogprice
-    defects {
-      defectdescription
-      defectstartdate
-      licenseplate
-    }
-    firstcolor
-    firstregistrationdate
-    licenseplate
-  }
-}
-```
+Join our community of developers creating universal apps.
 
-## Architecture
-
-![alt text](appsync-architecture.png)
-
-The AWS CDK stack defined in `cdk-appsync-demo-stack.ts` sets up the following resources:
-- DynamoDB tables:
-  - `cardata-cars`: Stores information about cars.
-  - `cardata-defects`: Stores information about defects associated with cars.
-   - `defects-by-licenseplate` Global Secondary Index (GSI) that allows to query defects by licenseplate
-- AppSync API (`carAPI`):
-  - GraphQL schema defined in `graphql/schema.graphql`.
-  - Data sources connected to DynamoDB tables.
-  - Resolvers to query data.
-- Resolvers:
-  - `getCar.js`: Resolver function to fetch cars from the `cardata-cars` table.
-  - `getDefects.js`: Resolver function to fetch defects associated with cars from the `cardata-defects` table.
-
-## Costs
-The operational expenses associated with deploying this architecture are estimated to be approximately a couple of dollars per month (based on the eu-central-1 region). Cost optimization measures can be implemented by adjusting the write capacity of DynamoDB tables and indexes to a lower setting after the execution of the `npm run push-data` command.
+- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
+- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
