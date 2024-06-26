@@ -17,6 +17,12 @@
       },
       "storage": {
         "s373efc1c1": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "djz85dd2tl0nt",
+          "type": "manual"
+        }
       }
     }
   }

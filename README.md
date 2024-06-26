@@ -1,98 +1,100 @@
-# AWS AppSync GraphQL Photo Sample
+# AWS CDK AppSync DynamoDB Table Joining Demo
 
-**Please submit issues to the [appsync-sdk-js](https://github.com/awslabs/aws-mobile-appsync-sdk-js/issues) repository.**
+<!--BEGIN STABILITY BANNER-->
 
-![Demo](public/demo.gif)
+![Stability: Stable](https://img.shields.io/badge/stability-Stable-success.svg?style=for-the-badge)
 
-This sample application shows how to use GraphQL to build an application that a user can login to the system, then upload and download photos which are private to them. The sample is written in React and uses AWS AppSync, Amazon Cognito, Amazon DynamoDB and Amazon S3 as well as the Amplify CLI.
+> **This is a stable example. It should successfully build out of the box**
+>
+> This example is built on Construct Libraries marked "Stable" and does not have any infrastructure prerequisites to build.
+---
 
-## Architecture Overview
+<!--END STABILITY BANNER-->
 
-![Architecture](public/architecture_diagram.png)
+This project demonstrates how to use AWS CDK (Cloud Development Kit) to create an AWS AppSync API backed by DynamoDB tables. The essence of this project lies in establishing a one-to-many relationship between two tables, where one table stores information about cars, and the other stores information about defects associated with cars. This allows querying both tables together as a sort of nested query.
+
+## Table of Contents
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Architecture](#architecture)
+
+## Overview
+
+This project sets up an AWS AppSync API named `carAPI` with two DynamoDB tables: `cardata-cars` and `cardata-defects`. The `cardata-cars` table stores information about cars, while the `cardata-defects` table stores information about defects associated with cars. The AppSync API provides GraphQL endpoints to query and mutate data in these tables. The essence of this project is to enable querying both tables in a nested manner, representing the one-to-many relationship between cars and defects.
+
+The data used in this project is sourced from public data of RDW (Government agency Dienst Wegverkeer, commonly known as RDW, which handles the type-approval and registration of motorized vehicles and driving licences in the Netherlands). This data used in this project is based on data freely available for use without any restrictions.
 
 ## Prerequisites
-+ [AWS Account](https://aws.amazon.com/mobile/details/)
 
-+ [NodeJS](https://nodejs.org/en/download/) with [NPM](https://docs.npmjs.com/getting-started/installing-node)
+Before getting started, ensure you have the following prerequisites:
+- Node.js installed (v18.x)
+- AWS CDK installed (`npm install -g aws-cdk`)
+- AWS CLI configured with appropriate credentials
 
-+ [AWS Ampify CLI](https://aws-amplify.github.io/)
-  - `npm install -g @aws-amplify/cli`
-  - `amplify configure` 
+## Installation
 
-## Getting Started
+1. Clone this repository to your local machine.
+2. Navigate to the project directory.
+3. Install dependencies by running `npm install`.
 
-1. Clone this repo locally.
+## Usage
 
-```
-git clone https://github.com/aws-samples/aws-amplify-graphql.git
-cd aws-amplify-graphql
-```
+To deploy the AWS infrastructure, run the following command:
 
-2. Initialize the amplify project.
-
-```
-amplify init
+```bash
+cdk deploy
 ```
 
-3. Configure an Amazon Cognito User Pool to manage user credentials.
+To remove the deployed infrastructure, run:
 
-```
-amplify add auth
-```
-
-![Architecture](public/amplify-add-auth.png)
-
-4. Configure an Amazon S3 bucket to store files.
-
-```
-amplify add storage
+```bash
+cdk destroy
 ```
 
-![Architecture](public/amplify-add-storage.png)
+The data in the DynamoDB tables can be populated using the utilities provided in `utils/index.js`. It will take a couple of seconds to push all the data to DynamoDB. Execute the following command to populate the tables:
 
-5. Configure an AWS AppSync API to interact with my backend data sources such as Amazon DynamoDB, Amazon Elasticsearch, AWS Lambda, and self hosted HTTP services. 
-
-```
-amplify add api
-
-# When prompted for a schema.graphql provide the value "schema.graphql"
-# to point to the file checked in to the root of the project directory.
+```bash
+npm run push-data
 ```
 
-![Architecture](public/amplify-add-api.png)
+Once the CDK stack is deployed and the data is ingested into the DynamoDB tables you can query it through the AWS Appsync Console. If you can go to the query tab you can execute the following GraphQL Request:
 
-> After running this command, you edit the schema.graphql located at `amplify/backend/api/<-projectname->/schema.graphql`. You may delete the one at the root of the project directory as it will no longer be used.
-
-6. Deploy your project.
-
-```
-amplify push
-
-# When asked if you would like to generate client code, you can
-# say no since we are using plain JavaScript.
-```
-
-7. Install client dependencies.
-
-```
-npm install
-
-# or
-yarn
+```graphql
+query GetCar {
+  getCar(licenseplate: "BR794ZQ3") {
+    expirydateapk
+    cylindervolume
+    catalogprice
+    defects {
+      defectdescription
+      defectstartdate
+      licenseplate
+    }
+    firstcolor
+    firstregistrationdate
+    licenseplate
+  }
+}
 ```
 
-8. Run the react application
+## Architecture
 
-```
-npm run start
+![alt text](appsync-architecture.png)
 
-# or
-yarn start
-```
+The AWS CDK stack defined in `cdk-appsync-demo-stack.ts` sets up the following resources:
+- DynamoDB tables:
+  - `cardata-cars`: Stores information about cars.
+  - `cardata-defects`: Stores information about defects associated with cars.
+   - `defects-by-licenseplate` Global Secondary Index (GSI) that allows to query defects by licenseplate
+- AppSync API (`carAPI`):
+  - GraphQL schema defined in `graphql/schema.graphql`.
+  - Data sources connected to DynamoDB tables.
+  - Resolvers to query data.
+- Resolvers:
+  - `getCar.js`: Resolver function to fetch cars from the `cardata-cars` table.
+  - `getDefects.js`: Resolver function to fetch defects associated with cars from the `cardata-defects` table.
 
-The AWS Amplify CLI will create an Amazon Cognito User Pool and Identity Pool, an Amazon S3 bucket with private directories to store each user's photo and an AWS AppSync API that uses Amazon DynamoDB to store data.
-
-The sample uses [AWS Amplify](https://github.com/aws/aws-amplify) to perform the Sign-Up and Sign-In flows with a Higher Order Component.
-
-If the application runs successfully you should be able to enter the name of a photo, choose a file and then press **Add photo**. This will make a GraphQL call to enter the record into the database and simultaneously upload the object to S3. An immediate fetch of the record will then be at the bottom of the screen.
-
+## Costs
+The operational expenses associated with deploying this architecture are estimated to be approximately a couple of dollars per month (based on the eu-central-1 region). Cost optimization measures can be implemented by adjusting the write capacity of DynamoDB tables and indexes to a lower setting after the execution of the `npm run push-data` command.
